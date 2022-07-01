@@ -25,8 +25,8 @@ import StoreKit
 
 struct ProductButton<Content:View>: View {
     
-    init(product:StoreProduct<Content>){
-        self.label = product.label
+    init(product:ExternalProduct){
+        self.name = product.name; self.icon = product.icon
         page = ProductPage(identifier: product.identifier)
     }
 
