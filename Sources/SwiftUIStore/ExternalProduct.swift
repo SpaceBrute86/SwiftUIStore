@@ -12,7 +12,7 @@ public struct ExternalProduct: Identifiable {
     public var name:String
     public var icon:String
     
-    init(identifier:Int, name:String, icon:String){
+    public init(identifier:Int, name:String, icon:String){
         self.identifier = identifier
         self.name = name; self.icon = icon
     }
