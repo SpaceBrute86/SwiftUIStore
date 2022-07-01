@@ -7,7 +7,7 @@ import Foundation
 import StoreKit
 
 
-typealias Transaction = StoreKit.Transaction
+public typealias Transaction = StoreKit.Transaction
 public enum StoreError: Error { case failedVerification }
 
 
