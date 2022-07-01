@@ -7,13 +7,14 @@
 
 import SwiftUI
 
-public struct ExternalProduct<Content:View>: Identifiable {
+public struct ExternalProduct: Identifiable {
     public var identifier:Int
-    public var label:()->Content
+    public var name:String
+    public var icon:String
     
-    init(identifier:Int, label:@escaping ()->Content){
+    init(identifier:Int, name:String, icon:String){
         self.identifier = identifier
-        self.label = label
+        self.name = name; self.icon = icon
     }
     public var id:Int{ identifier }
 }
@@ -30,9 +31,18 @@ struct ProductButton<Content:View>: View {
     }
 
     private var page:ProductPage!
-    private var label:()->Content
+    private var name:String
+    private var icon:String
 
-    var body: some View{  Button(action: { page.present() }, label: label) }
+    var body: some View{
+        Button(action: { page.present() }){
+            HStack{
+                Text(name)
+                Spacer()
+                Image(icon).resizable().scaledToFit().frame(height: 50)
+            }
+        }
+    }
 }
 
 final private class ProductPage:NSObject, SKStoreProductViewControllerDelegate {
