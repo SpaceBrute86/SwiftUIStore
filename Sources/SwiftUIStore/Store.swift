@@ -10,10 +10,6 @@ import StoreKit
 public typealias Transaction = StoreKit.Transaction
 public enum StoreError: Error { case failedVerification }
 
-public struct StoreConfiguration{
-    public static let NoAdsIdentifier = "NO_ADS"
-    public static let ProductIdentifiers = "IDS"
-}
 
 
 public class Store: ObservableObject {
@@ -29,11 +25,15 @@ public class Store: ObservableObject {
     public static var shared:Store { if _shared == nil {_shared = Store()}; return _shared! }
     
     //MARK: Configuration
+    public struct Configuration{
+        public static let NoAdsIdentifier = "NO_ADS"
+        public static let ProductIdentifiers = "IDS"
+    }
     public var productIDs:[String] = []
     public static func configure(_ config:[String:Any]){
         _shared = Store()
-        if let str = config[StoreConfiguration.NoAdsIdentifier] as? String { _shared?.noAdsIdentifier = str }
-        if let ids = config[StoreConfiguration.ProductIdentifiers] as? [String] { _shared?.productIDs = ids }
+        if let str = config[Configuration.NoAdsIdentifier] as? String { _shared?.noAdsIdentifier = str }
+        if let ids = config[Configuration.ProductIdentifiers] as? [String] { _shared?.productIDs = ids }
         //Start a transaction listener as close to app launch as possible so you don't miss any transactions.
         _shared?.updateListenerTask = _shared?.listenForTransactions()
         Task {

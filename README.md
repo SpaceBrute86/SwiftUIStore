@@ -2,13 +2,14 @@
 
 A simple implementation of non-consumable in app purchases in SwiftUI. 
 
-If you use MonetizedWindowGroup to instantiate your scene, the shared store object will be automatically initialized at launch, and passed as an environment object to your views. 
+At launch, either call Store.configure, or use MonetizedWindowGroup to instantiate your scene.  MonetizedWindowGroup will call Store.configure for you, and will also pass the store object as an environment object to your views.
+Your configuration dictionary can use the following keys:
+Store.Configuration.NoAdsIdentifier for a "remove ads" product ID
+Store.Configuration.FeatureIdentifiers for all other product IDs.
 
 To give the user access to the store, add a *StoreButton* to your view.
 
-If you have an IAP which removes advertisements, call   
-Store.shared.noAdsIdentifier = "YOUR_NO_ADS_IAP_IDENTIFIER"
-as early as possible. Then to determine if the user has purchased this, jsut call store.hasAdsRemoved
+If you have an IAP which removes advertisements, just pass the appropriate key to the configuration dictionary, and call store.hasAdsRemoved to determine if this particular product has been purchased. 
 
 On iOS, the store page includes the ability to advertise addtional products. To do so, do the following:
 1. Obtain the identifier from App Store Connect / etc.
