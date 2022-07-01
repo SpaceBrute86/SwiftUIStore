@@ -23,7 +23,7 @@ public struct ExternalProduct: Identifiable {
 //import SwiftUIX
 import StoreKit
 
-struct ProductButton<Content:View>: View {
+struct ProductButton: View {
     
     init(product:ExternalProduct){
         self.name = product.name; self.icon = product.icon
