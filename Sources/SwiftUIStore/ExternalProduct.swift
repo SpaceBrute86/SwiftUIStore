@@ -20,7 +20,7 @@ public struct ExternalProduct: Identifiable {
 }
 
 #if os(iOS)
-import SwiftUIX
+//import SwiftUIX
 import StoreKit
 
 struct ProductButton<Content:View>: View {
