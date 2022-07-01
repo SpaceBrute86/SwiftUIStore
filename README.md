@@ -9,11 +9,11 @@ Store.Configuration.FeatureIdentifiers for all other product IDs.
 
 To give the user access to the store, add a *StoreButton* to your view.
 
-If you have an IAP which removes advertisements, just pass the appropriate key to the configuration dictionary, and call store.hasAdsRemoved to determine if this particular product has been purchased. 
-
 On iOS, the store page includes the ability to advertise addtional products. To do so, do the following:
 1. Obtain the identifier from App Store Connect / etc.
 2. Obtain the icon (with rounded corners) for the product you wish to advertise, and add it to your app's asset catalog
 3. In your code, create an *ExternalProduct* with the identifier, display name of the product, and the name of the icon asset for that product
 4. Pass your array of *ExternalProduct*s to the *StoreButton*, and it will take care of the rest
 
+
+If you have an IAP which removes advertisements, just pass the appropriate key to the configuration dictionary, and call store.hasAdsRemoved to determine if this particular product has been purchased. 
