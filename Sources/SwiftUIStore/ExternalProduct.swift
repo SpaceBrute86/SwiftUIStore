@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import StoreKit
 
 public struct ExternalProduct: Identifiable {
     public var identifier:Int
@@ -20,8 +21,6 @@ public struct ExternalProduct: Identifiable {
 }
 
 #if os(iOS)
-//import SwiftUIX
-import StoreKit
 
 struct ProductButton: View {
     
