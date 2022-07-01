@@ -6,5 +6,5 @@
 //
 
 import Foundation
-import GoogleMobileAds
+//import GoogleMobileAds
 
