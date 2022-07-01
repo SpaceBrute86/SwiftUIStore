@@ -10,7 +10,10 @@ import StoreKit
 
 
 public struct MonetizedWindowGroup<Content:View>:Scene {
-    public init(content:@escaping ()->Content){ self.content = content }
+    public init(configuration:[String:Any],content:@escaping ()->Content){
+        Store.configure(configuration)
+        self.content = content
+    }
 
     @StateObject private var store: Store = Store.shared
     private var content: ()->Content
