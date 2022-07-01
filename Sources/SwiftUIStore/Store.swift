@@ -73,7 +73,7 @@ public class Store: ObservableObject {
     @MainActor
     func requestProducts() async {
         do {
-            let storeProducts = try await Product.products(for: [noAdsIdentifier])
+            let storeProducts = try await Product.products(for: [noAdsIdentifier]+productIDs)
             //Filter the products into categories based on their type.
             //Sort each product category by price, lowest to highest, to update the store.
             items = sortByPrice(storeProducts.compactMap{  $0.type == .nonConsumable ? $0 : nil } )
