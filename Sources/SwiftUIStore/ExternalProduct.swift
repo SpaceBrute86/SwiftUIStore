@@ -22,7 +22,7 @@ public struct ExternalProduct: Identifiable {
 
 #if os(iOS)
 
-struct ProductButton: View {
+public struct ProductButton: View {
     
     init(product:ExternalProduct){
         self.name = product.name; self.icon = product.icon
