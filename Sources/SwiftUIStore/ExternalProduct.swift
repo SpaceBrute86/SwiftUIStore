@@ -24,7 +24,7 @@ public struct ExternalProduct: Identifiable {
 
 public struct ProductButton: View {
     
-    init(product:ExternalProduct){
+    public init(product:ExternalProduct){
         self.name = product.name; self.icon = product.icon
         page = ProductPage(identifier: product.identifier)
     }
@@ -33,7 +33,7 @@ public struct ProductButton: View {
     private var name:String
     private var icon:String
 
-    var body: some View{
+    public var body: some View{
         Button(action: { page.present() }){
             HStack{
                 Text(name)
