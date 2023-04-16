@@ -22,3 +22,35 @@ public struct MonetizedWindowGroup<Content:View>:Scene {
         WindowGroup { content().environmentObject(store) }
     }
 }
+
+public struct MonetizedDocumentGroup<Content:View, Document:FileDocument>:Scene {
+    public init(configuration:[String:Any], newDocument:@escaping()->Document, editor:@escaping (FileDocumentConfiguration<Document>)->Content){
+        Store.configure(configuration)
+        self.newDocument = newDocument
+        self.editor = editor
+    }
+
+    @StateObject private var store: Store = Store.shared
+    private var newDocument:()->Document
+    private var editor: (FileDocumentConfiguration<Document>)->Content
+
+    @SceneBuilder public var body: some Scene{
+        DocumentGroup(newDocument: newDocument(), editor: { editor($0).environmentObject(store) })
+    }
+}
+
+public struct MonetizedReferenceDocumentGroup<Content:View, Document:ReferenceFileDocument>:Scene {
+    public init(configuration:[String:Any], newDocument:@escaping()->Document, editor:@escaping (ReferenceFileDocumentConfiguration<Document>)->Content){
+        Store.configure(configuration)
+        self.newDocument = newDocument
+        self.editor = editor
+    }
+
+    @StateObject private var store: Store = Store.shared
+    private var newDocument:()->Document
+    private var editor: (ReferenceFileDocumentConfiguration<Document>)->Content
+
+    @SceneBuilder public var body: some Scene{
+        DocumentGroup(newDocument: newDocument, editor: { editor($0).environmentObject(store) })
+    }
+}
