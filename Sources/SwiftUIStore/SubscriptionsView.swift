@@ -25,7 +25,7 @@ struct SubscriptionsView: View {
         let inactiveSubs = store.subscriptions.filter{ product in !currentSubscriptions.map{$0.0.id}.contains(where: {$0 == product.id}) }
         for (groupID, displayName) in store.groupNames {
             let products = inactiveSubs.filter { $0.subscription?.subscriptionGroupID == groupID }
-            guard products.isEmpty else {continue}
+           // guard products.isEmpty else {continue}
             groups += [(displayName, products)]
         }
         return groups
