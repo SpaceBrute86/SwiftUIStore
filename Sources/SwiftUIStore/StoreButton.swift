@@ -14,3 +14,14 @@ public struct StoreButton:View{
         }
     }
 }
+
+public struct StoreNavigationLink:View{
+    @State private var title = "Store"
+    
+    private var externals:[ExternalProduct]
+    public init(title:String, externalProducts:[ExternalProduct]){ self.title = title; externals = externalProducts }
+    
+    public var body: some View {
+        NavigationLink(title){ StoreView(externalProducts: externals) } 
+    }
+}

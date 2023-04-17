@@ -12,14 +12,16 @@ public enum StoreError: Error { case failedVerification }
 
 
 
+
+
 public class Store: ObservableObject {
 
     @Published public private(set) var items: [Product] = []
     @Published public private(set) var purchases: [Product] = []
+    @Published public private(set) var consumables: [Product] = []
+    @Published public private(set) var subscriptions: [Product] = []
+    @Published public private(set) var purchasedSubscriptions: [Product] = []
     
-    func sortByPrice(_ products: [Product]) -> [Product] {
-        products.sorted(by: { return $0.price < $1.price })
-    }
 
     private static var _shared:Store?
     public static var shared:Store { if _shared == nil {_shared = Store()}; return _shared! }
@@ -28,15 +30,19 @@ public class Store: ObservableObject {
     public struct Configuration{
         public static let NoAdsIdentifier = "NO_ADS"
         public static let ProductIdentifiers = "IDS"
+        public static let SubscriptionGroupNames = "GROUPS"
     }
     public var productIDs:[String] = []
+    public var groupNames:[String:String] = [:]
     public static func configure(_ config:[String:Any]){
         _shared = Store()
-        if let str = config[Configuration.NoAdsIdentifier] as? String { _shared?.noAdsIdentifier = str }
-        if let ids = config[Configuration.ProductIdentifiers] as? [String] { _shared?.productIDs = ids }
         //Start a transaction listener as close to app launch as possible so you don't miss any transactions.
         _shared?.updateListenerTask = _shared?.listenForTransactions()
         Task {
+            if let str = config[Configuration.NoAdsIdentifier] as? String { _shared?.noAdsIdentifier = str }
+            if let ids = config[Configuration.ProductIdentifiers] as? [String] { _shared?.productIDs = ids }
+            if let groups = config[Configuration.SubscriptionGroupNames] as? [String:String] { _shared?.groupNames = groups }
+            
             await _shared?.requestProducts() //During store initialization, request products from the App Store.
             await _shared?.updateCustomerProductStatus()//Deliver products that the customer purchases.
         }
@@ -73,15 +79,17 @@ public class Store: ObservableObject {
     @MainActor
     func requestProducts() async {
         do {
-            let storeProducts = try await Product.products(for: [noAdsIdentifier]+productIDs)
-            //Filter the products into categories based on their type.
+            let storeProducts = try await Product.products(for: [noAdsIdentifier] + productIDs)
             //Sort each product category by price, lowest to highest, to update the store.
-            items = sortByPrice(storeProducts.compactMap{  $0.type == .nonConsumable ? $0 : nil } )
+            items = storeProducts.filter{  $0.type == .nonConsumable }.sortedByPrice()
+            consumables = storeProducts.filter {  $0.type == .consumable }.sortedByPrice()
+            subscriptions = storeProducts.filter {  $0.type == .autoRenewable }.sortedByPrice()
         } catch {   print("Failed product request from the App Store server: \(error)") }
     }
     @MainActor
     func updateCustomerProductStatus() async {
         var purchasedItems: [Product] = []
+        var purchasedSubscriptions: [Product] = []
 
         //Iterate through all of the user's purchased products.
         for await result in Transaction.currentEntitlements {
@@ -91,12 +99,15 @@ public class Store: ObservableObject {
                 //Check the `productType` of the transaction and get the corresponding product from the store.
                 if transaction.productType == .nonConsumable, let item = items.first(where: { $0.id == transaction.productID }) {
                     purchasedItems.append(item)
+                } else  if transaction.productType == .autoRenewable, let sub = subscriptions.first(where: { $0.id == transaction.productID }) {
+                    purchasedSubscriptions.append(sub)
                 }
             } catch { print() }
         }
 
         //Update the store information with the purchased products.
         self.purchases = purchasedItems
+        self.purchasedSubscriptions = purchasedSubscriptions
     }
 
     //MARK: Make purchase
@@ -121,6 +132,7 @@ public class Store: ObservableObject {
     public func isPurchased(_ product: Product) async throws -> Bool {
         switch product.type {
         case .nonConsumable: return purchases.contains(product)
+        case .autoRenewable: return purchasedSubscriptions.contains(product)
         default: return false
         }
     }
@@ -138,4 +150,11 @@ public class Store: ObservableObject {
    
 
     
+}
+
+
+public extension [Product] {
+    func sortedByPrice() -> [Product] {
+        self.sorted(by: { return $0.price < $1.price })
+    }
 }

@@ -18,14 +18,21 @@ struct StoreView: View {
 
     var body: some View {
         List {
-            Section("In App Purchases") {
-                ForEach(store.items) { item in
-                    ListCellView(product: item)
+            SubscriptionsView()
+
+            if !(store.items.isEmpty && store.consumables.isEmpty){
+                Section("In App Purchases") {
+                    ForEach(store.items) { item in
+                        ListCellView(product: item)
+                    }
+                    ForEach(store.consumables) { item in
+                        ListCellView(product: item)
+                    }
                 }
             }
-
-            Button("Restore Purchases", action: { Task {  try? await AppStore.sync() }  })
-            
+            if !(store.subscriptions.isEmpty && store.items.isEmpty){
+                Button("Restore Purchases", action: { Task {  try? await AppStore.sync() }  })
+            }
             #if os(iOS)
             if !externals.isEmpty {
                 Section("More apps"){
