@@ -84,11 +84,6 @@ public class Store: ObservableObject {
             items = storeProducts.filter{  $0.type == .nonConsumable }.sortedByPrice()
             consumables = storeProducts.filter {  $0.type == .consumable }.sortedByPrice()
             subscriptions = storeProducts.filter {  $0.type == .autoRenewable }.sortedByPrice()
-            
-            for product in subscriptions { guard let sub = product.subscription else { continue }
-                print(sub.subscriptionGroupID + "\n")
-            }
-            
         } catch {   print("Failed product request from the App Store server: \(error)") }
     }
     @MainActor
