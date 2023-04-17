@@ -18,8 +18,13 @@ struct StoreView: View {
 
     var body: some View {
         List {
-            SubscriptionsView()
+           // SubscriptionsView()
 
+            Section("Subscriptions") {
+                ForEach(store.subscriptions) { item in
+                    ListCellView(product: item)
+                }
+            }
             if !(store.items.isEmpty && store.consumables.isEmpty){
                 Section("In App Purchases") {
                     ForEach(store.items) { item in
