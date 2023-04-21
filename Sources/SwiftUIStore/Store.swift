@@ -43,8 +43,11 @@ public class Store: ObservableObject {
             if let ids = config[Configuration.ProductIdentifiers] as? [String] { _shared?.productIDs = ids }
             if let groups = config[Configuration.SubscriptionGroupNames] as? [String:String] { _shared?.groupNames = groups }
             
+            try? await _shared?.checkPurchaseVersion()
+
             await _shared?.requestProducts() //During store initialization, request products from the App Store.
             await _shared?.updateCustomerProductStatus()//Deliver products that the customer purchases.
+            
         }
     }
     
@@ -146,9 +149,25 @@ public class Store: ObservableObject {
             //The result is verified. Return the unwrapped value.
         }
     }
+    
+    
+    //MARK: App Version
+    //Useful for changing Business model
+    
+    public private(set) var originalAppMajorVersion:Int = 1
+    public private(set) var originalAppMinorVersion:Int = 0
 
-   
-
+    
+    func checkPurchaseVersion() async throws {
+        guard #available(iOS 16.0, *) else { return }
+        let shared = try await AppTransaction.shared
+        if case .verified(let appTransaction) = shared {
+            let versionComponents = appTransaction.originalAppVersion.split(separator: ".")
+            originalAppMajorVersion = Int(versionComponents[0]) ?? 1
+            originalAppMinorVersion = Int(versionComponents[1]) ?? 0
+        }
+    
+    }
     
 }
 
