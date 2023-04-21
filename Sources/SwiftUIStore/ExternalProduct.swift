@@ -38,7 +38,7 @@ public struct ProductButton: View {
             HStack{
                 Text(name)
                 Spacer()
-                Image(icon).resizable().scaledToFit().frame(height: 50)
+                Image(icon).resizable().scaledToFit().frame(height: 50).padding()
             }
         }
     }
