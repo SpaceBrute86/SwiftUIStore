@@ -154,8 +154,8 @@ public class Store: ObservableObject {
     //MARK: App Version
     //Useful for changing Business model
     
-    public private(set) var originalAppMajorVersion:Int = 1
-    public private(set) var originalAppMinorVersion:Int = 0
+    public private(set) var originalAppMajorVersion:Int?
+    public private(set) var originalAppMinorVersion:Int?
 
     
     func checkPurchaseVersion() async throws {
@@ -163,8 +163,8 @@ public class Store: ObservableObject {
         let shared = try await AppTransaction.shared
         if case .verified(let appTransaction) = shared {
             let versionComponents = appTransaction.originalAppVersion.split(separator: ".")
-            originalAppMajorVersion = Int(versionComponents[0]) ?? 1
-            originalAppMinorVersion = Int(versionComponents[1]) ?? 0
+            originalAppMajorVersion = Int(versionComponents[0])
+            originalAppMinorVersion = Int(versionComponents[1])
         }
     
     }
