@@ -21,6 +21,11 @@ public struct StoreButton:View{
             if !titleString.isEmpty {  Text(titleString) } else { Image(systemName: imageName) }
         }).font(.title2).padding().sheet(isPresented: $showingPurchase){
             NavigationView{ StoreView(externalProducts: externals) }
+            #if !os(watchOS)
+            .toolbar{ ToolbarItemGroup(placement: .navigationBarLeading){
+                Button(action: {showingPurchase = false}, label: {Image(systemName: "chevron.backward")})
+            }}
+            #endif
         }
     }
 }

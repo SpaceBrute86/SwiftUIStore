@@ -11,7 +11,6 @@ import StoreKit
 struct StoreView: View {
     
     @EnvironmentObject var store: Store
-    @Environment(\.dismiss) private var dismiss
 
     private var externals:[ExternalProduct]
     init(externalProducts:[ExternalProduct]){ externals = externalProducts }
@@ -42,11 +41,7 @@ struct StoreView: View {
             #endif
 
         }.navigationTitle("Store")
-        #if !os(watchOS)
-        .toolbar{
-            ToolbarItemGroup(placement: .navigationBarLeading){Button(action: {dismiss()}, label: {Image(systemName: "chevron.backward")}) }
-        }
-        #endif
+       
        
     }
 }
