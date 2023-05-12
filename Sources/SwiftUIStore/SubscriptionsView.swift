@@ -45,8 +45,12 @@ struct SubscriptionsView: View {
             }
             ForEach(availableSubscriptions, id: \.1){ group in
                 Section(group.0){
-                    ForEach(group.1){ product in
-                        ListCellView(product: product)
+                    if group.1.isEmpty {
+                        Text("Error Loading Products")
+                    } else {
+                        ForEach(group.1){ product in
+                            ListCellView(product: product)
+                        }
                     }
                 }
             }
