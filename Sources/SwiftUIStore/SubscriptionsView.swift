@@ -52,8 +52,8 @@ struct SubscriptionsView: View {
                             ListCellView(product: product)
                         }
                     }
+                    Text(group.1).font(.caption)
                 }
-                Text(group.1)
             }
         }
         .onAppear{Task{await updateSubscriptionStatus()}}
