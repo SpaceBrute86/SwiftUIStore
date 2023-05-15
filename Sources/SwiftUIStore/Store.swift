@@ -33,7 +33,7 @@ public class Store: ObservableObject {
         public static let SubscriptionGroupNames = "GROUPS"
     }
     public var productIDs:[String] = []
-    public var groupNames:[String:String] = [:]
+    public var groupNames:[String:(String,String)] = [:]
     public static func configure(_ config:[String:Any]){
         _shared = Store()
         //Start a transaction listener as close to app launch as possible so you don't miss any transactions.
@@ -41,7 +41,7 @@ public class Store: ObservableObject {
         Task {
             if let str = config[Configuration.NoAdsIdentifier] as? String { _shared?.noAdsIdentifier = str }
             if let ids = config[Configuration.ProductIdentifiers] as? [String] { _shared?.productIDs = ids }
-            if let groups = config[Configuration.SubscriptionGroupNames] as? [String:String] { _shared?.groupNames = groups }
+            if let groups = config[Configuration.SubscriptionGroupNames] as? [String:(String,String)] { _shared?.groupNames = groups }
             
             try? await _shared?.checkPurchaseVersion()
 
