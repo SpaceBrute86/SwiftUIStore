@@ -30,7 +30,15 @@ struct StoreView: View {
                 }
             }
             if !(store.subscriptions.isEmpty && store.items.isEmpty){
-                Button("Restore Purchases", action: { Task {  try? await AppStore.sync() }  })
+                Section{
+                    Button("Restore Purchases", action: { Task {  try? await AppStore.sync() }  })
+                    if let url = store.termsOfUseURL {
+                        Button("Terms of Use"){ UIApplication.shared.open(url) }
+                    }
+                    if let url = store.privacyURL {
+                        Button("Privacy Policy"){ UIApplication.shared.open(url) }
+                    }
+                }
             }
             #if os(iOS)
             if !externals.isEmpty {

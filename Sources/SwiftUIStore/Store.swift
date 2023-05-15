@@ -31,9 +31,12 @@ public class Store: ObservableObject {
         public static let NoAdsIdentifier = "NO_ADS"
         public static let ProductIdentifiers = "IDS"
         public static let SubscriptionGroupNames = "GROUPS"
+        public static let TermsOfUseURL = "TERMS_OF_USE"
+        public static let PrivacyURL = "PRIVACY"
     }
     public var productIDs:[String] = []
     public var groupNames:[String:(String,String)] = [:]
+    public var termsOfUseURL:URL?, privacyURL: URL?
     public static func configure(_ config:[String:Any]){
         _shared = Store()
         //Start a transaction listener as close to app launch as possible so you don't miss any transactions.
@@ -42,7 +45,9 @@ public class Store: ObservableObject {
             if let str = config[Configuration.NoAdsIdentifier] as? String { _shared?.noAdsIdentifier = str }
             if let ids = config[Configuration.ProductIdentifiers] as? [String] { _shared?.productIDs = ids }
             if let groups = config[Configuration.SubscriptionGroupNames] as? [String:(String,String)] { _shared?.groupNames = groups }
-            
+            if let url = config[Configuration.TermsOfUseURL] as? URL { _shared?.termsOfUseURL = url }
+            if let url = config[Configuration.PrivacyURL] as? URL { _shared?.privacyURL = url }
+
             try? await _shared?.checkPurchaseVersion()
 
             await _shared?.requestProducts() //During store initialization, request products from the App Store.
