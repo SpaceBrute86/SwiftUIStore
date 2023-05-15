@@ -20,13 +20,13 @@ struct SubscriptionsView: View {
 
     @State var currentSubscriptions: [(Product, Product.SubscriptionInfo.Status)] = []
 
-    var availableSubscriptions: [(String,[Product])] {
-        var groups:[(String,[Product])] = []
+    var availableSubscriptions: [(String,String, [Product])] {
+        var groups:[(String,String,[Product])] = []
         let inactiveSubs = store.subscriptions.filter{ product in !currentSubscriptions.map{$0.0.id}.contains(where: {$0 == product.id}) }
         for (groupID, displayName) in store.groupNames {
             let products = inactiveSubs.filter { $0.subscription?.subscriptionGroupID == groupID }
            // guard products.isEmpty else {continue}
-            groups += [(displayName, products)]
+            groups += [(displayName.0,displayName.1, products)]
         }
         return groups
     }
@@ -43,16 +43,17 @@ struct SubscriptionsView: View {
                     SubscriptionStatusInfoView(product: product.0, status: product.1)
                 }
             }
-            ForEach(availableSubscriptions, id: \.1){ group in
+            ForEach(availableSubscriptions, id: \.2){ group in
                 Section(group.0){
-                    if group.1.isEmpty {
+                    if group.2.isEmpty {
                         Text("Error Loading Products")
                     } else {
-                        ForEach(group.1){ product in
+                        ForEach(group.2){ product in
                             ListCellView(product: product)
                         }
                     }
                 }
+                Text(group.1)
             }
         }
         .onAppear{Task{await updateSubscriptionStatus()}}
