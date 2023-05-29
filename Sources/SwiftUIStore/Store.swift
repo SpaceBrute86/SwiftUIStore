@@ -164,7 +164,7 @@ public class Store: ObservableObject {
 
     
     func checkPurchaseVersion() async throws {
-        guard #available(iOS 16.0, *) else { return }
+        guard #available(iOS 16.0, watchOS 9.0, *) else { return }
         let shared = try await AppTransaction.shared
         if case .verified(let appTransaction) = shared {
             let versionComponents = appTransaction.originalAppVersion.split(separator: ".")
