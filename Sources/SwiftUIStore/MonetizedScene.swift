@@ -23,6 +23,7 @@ public struct MonetizedWindowGroup<Content:View>:Scene {
     }
 }
 
+@available(iOS 16.0, macOS 13.0, *)
 public struct MonetizedDocumentGroup<Content:View, Document:FileDocument>:Scene {
     public init(configuration:[String:Any], newDocument:@escaping()->Document, editor:@escaping (FileDocumentConfiguration<Document>)->Content){
         Store.configure(configuration)
@@ -39,6 +40,7 @@ public struct MonetizedDocumentGroup<Content:View, Document:FileDocument>:Scene 
     }
 }
 
+@available(iOS 16.0, macOS 13.0, *)
 public struct MonetizedReferenceDocumentGroup<Content:View, Document:ReferenceFileDocument>:Scene {
     public init(configuration:[String:Any], newDocument:@escaping()->Document, editor:@escaping (ReferenceFileDocumentConfiguration<Document>)->Content){
         Store.configure(configuration)
