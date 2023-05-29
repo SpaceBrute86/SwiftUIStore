@@ -29,6 +29,7 @@ struct StoreView: View {
                     }
                 }
             }
+            #if os(iOS)
             if !(store.subscriptions.isEmpty && store.items.isEmpty){
                 Section{
                     Button("Restore Purchases", action: { Task {  try? await AppStore.sync() }  })
@@ -40,7 +41,6 @@ struct StoreView: View {
                     }
                 }
             }
-            #if os(iOS)
             if !externals.isEmpty {
                 Section("More apps"){
                     ForEach(externals){  ProductButton(product: $0) }
