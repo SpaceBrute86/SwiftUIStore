@@ -23,6 +23,7 @@ public struct MonetizedWindowGroup<Content:View>:Scene {
     }
 }
 
+#if !os(watchOS)
 public struct MonetizedDocumentGroup<Content:View, Document:FileDocument>:Scene {
     public init(configuration:[String:Any], newDocument:@escaping()->Document, editor:@escaping (FileDocumentConfiguration<Document>)->Content){
         Store.configure(configuration)
@@ -54,3 +55,4 @@ public struct MonetizedReferenceDocumentGroup<Content:View, Document:ReferenceFi
         DocumentGroup(newDocument: newDocument, editor: { editor($0).environmentObject(store) })
     }
 }
+#endif
