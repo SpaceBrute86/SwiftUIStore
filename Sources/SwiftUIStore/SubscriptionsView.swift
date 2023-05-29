@@ -38,7 +38,7 @@ struct SubscriptionsView: View {
                     ForEach(currentSubscriptions, id: \.0){ product in
                         ActiveSubscriptionCellView(product: product.0, status: product.1)
                     }
-                }.listStyle(GroupedListStyle())
+                }//.listStyle(GroupedListStyle())
                 ForEach(currentSubscriptions, id: \.1){ product in
                     SubscriptionStatusInfoView(product: product.0, status: product.1)
                 }
