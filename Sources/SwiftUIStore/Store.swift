@@ -48,7 +48,7 @@ public class Store: ObservableObject {
             if let url = config[Configuration.TermsOfUseURL] as? URL { _shared?.termsOfUseURL = url }
             if let url = config[Configuration.PrivacyURL] as? URL { _shared?.privacyURL = url }
 
-            try? await _shared?.checkPurchaseVersion()
+            await _shared?.checkPurchaseVersion()
 
             await _shared?.requestProducts() //During store initialization, request products from the App Store.
             await _shared?.updateCustomerProductStatus()//Deliver products that the customer purchases.
@@ -163,15 +163,18 @@ public class Store: ObservableObject {
     public private(set) var originalAppMinorVersion:Int?
 
     
-    func checkPurchaseVersion() async throws {
-        guard #available(iOS 16.0, watchOS 9.0, *) else { return }
-        let shared = try await AppTransaction.shared
-        if case .verified(let appTransaction) = shared {
-            let versionComponents = appTransaction.originalAppVersion.split(separator: ".")
-            originalAppMajorVersion = Int(versionComponents[0])
-            originalAppMinorVersion = Int(versionComponents[1])
-        }
-    
+    func checkPurchaseVersion() async {
+        /*
+        guard #available(iOS 16.0, watchOS 9.0, macOS 13.0, *) else { return }
+        do {
+            let shared = try await AppTransaction.shared
+            if case .verified(let appTransaction) = shared {
+                let versionComponents = appTransaction.originalAppVersion.split(separator: ".")
+                originalAppMajorVersion = Int(versionComponents[0])
+                originalAppMinorVersion = Int(versionComponents[1])
+            }
+        } catch{print()}
+    */
     }
     
 }
