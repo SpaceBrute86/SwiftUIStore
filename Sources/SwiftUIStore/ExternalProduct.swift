@@ -20,7 +20,24 @@ public struct ExternalProduct: Identifiable {
     public var id:Int{ identifier }
 }
 
+
+
+
 #if os(iOS)
+
+public struct ProductCustomButton<Label> : View where Label : View {
+    public init(product:ExternalProduct, @ViewBuilder content: @escaping ()->Label){
+        page = ProductPage(identifier: product.identifier)
+        buttonContent = content
+    }
+    
+    private var page:ProductPage!
+    private var buttonContent:()->Label
+    
+    public var body: some View{
+        Button(action: { page.present() }, label: buttonContent)
+    }
+}
 
 public struct ProductButton: View {
     
