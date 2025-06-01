@@ -20,16 +20,22 @@ public struct StoreButton:View{
         Button(action: { showingPurchase = true }, label: {
             if !titleString.isEmpty {  Text(titleString) } else { Image(systemName: imageName) }
         }).font(.title2).padding().sheet(isPresented: $showingPurchase){
-            NavigationView{ StoreView(externalProducts: externals) }
             #if os(iOS)
-            .toolbar{ ToolbarItemGroup(placement: .navigationBarLeading){
+            navView.toolbar{ ToolbarItemGroup(placement: .navigationBarLeading){
                 Button(action: {showingPurchase = false}, label: {Image(systemName: "chevron.backward")})
             }}
             #elseif os(macOS)
-            .toolbar{ ToolbarItemGroup(placement: .navigation){
+            navView.toolbar{ ToolbarItemGroup(placement: .navigation){
                 Button(action: {showingPurchase = false}, label: {Image(systemName: "chevron.backward")})
             }}
             #endif
+        }
+    }
+    @ViewBuilder var navView: some View {
+        if #available(iOS 16.0, macOS 13.0, watchOS 9.0, *) {
+            NavigationStack{ StoreView(externalProducts: externals) }
+        } else {
+            NavigationView{ StoreView(externalProducts: externals) }
         }
     }
 }
