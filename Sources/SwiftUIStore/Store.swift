@@ -145,7 +145,7 @@ public class Store: ObservableObject {
         }
     }
 
-    func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
+    public func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
         //Check whether the JWS passes StoreKit verification.
         switch result {
         case .unverified: throw StoreError.failedVerification
