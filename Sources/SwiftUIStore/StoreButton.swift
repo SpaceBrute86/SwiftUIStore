@@ -27,7 +27,7 @@ public struct StoreButton:View{
             #elseif os(macOS)
             navView.toolbar{ ToolbarItemGroup(placement: .navigation){
                 Button(action: {showingPurchase = false}, label: {Image(systemName: "chevron.backward")})
-            }}
+            }}.frame(minHeight: 300)
             #endif
         }
     }
